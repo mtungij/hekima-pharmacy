@@ -1,0 +1,271 @@
+<?php include('incs/header.php'); ?>
+<?php include('incs/nav.php'); ?>
+<?php include('incs/side.php'); ?>
+
+<style>
+    .select2-container .select2-selection--single{
+    height:34px !important;
+}
+.select2-container--default .select2-selection--single{
+         border: 1px solid #ccc !important; 
+     border-radius: 0px !important; 
+}
+</style>
+<link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/css/select2.min.css">
+<script src="<?php echo base_url('assets/admin/js/jquery.js'); ?>"></script>
+
+
+<div id="main-content">
+<div class="container-fluid">
+<br>
+<?php if ($das = $this->session->flashdata('massage')): ?>
+<div class="row">
+<div class="col-md-12">
+<div class="alert alert-dismisible alert-success">
+<a href="" class="close">&times;</a>
+<?php echo $das;?>
+</div>
+</div>
+</div>
+<?php endif; ?>
+
+<?php if ($das = $this->session->flashdata('error')): ?>
+<div class="row">
+<div class="col-md-12">
+<div class="alert alert-dismisible alert-danger">
+<a href="" class="close">&times;</a>
+<?php echo $das;?>
+</div>
+</div>
+</div>
+<?php endif; ?>
+<div class="row clearfix">
+<div class="col-lg-12 col-md-12 col-sm-12">
+<div class="card">
+<div class="header">
+<h2>Transfor Product Quantity</h2>
+</div>
+<div class="body">
+  
+        <?php echo form_open_multipart("admin/transifor_product"); ?>
+<div class="row clearfix">
+       <div class="col-sm-6">
+        <div class="form-group">
+           <span>From Store Product</span>
+           <select type="number" class="form-control select2" name="product_id" id="product">
+               <option value="">Select Product</option>
+               <?php foreach ($store_product as $store_products): ?>
+               <option value="<?php echo $store_products->product_id; ?>"><?php echo $store_products->name; ?> - <?php echo $store_products->bland; ?> - (<?php echo $store_products->quantity_product; ?>)</option>
+                <?php endforeach; ?>
+           </select>
+        </div>
+    </div>
+       <div class="col-sm-6">
+        <div class="form-group">
+           <span>To Pharmacy Product<span>
+             <select type="number" class="form-control select2" name="product_id" id="stoo"  required >
+               <option value="">Select Product</option>
+           </select>
+        </div>
+    </div>
+       <div class="col-sm-4">
+      <div class="form-group">
+        <span>Container </span>
+            <input type="number" autocomplete="off" id="cont1"  name="balance" class="form-control" placeholder="Container">
+            <?php //echo form_error("balance"); ?>
+        </div>
+    </div>
+  <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+   
+     <div class="col-sm-4">
+      <div class="form-group">
+        <span> pc </span>
+            <input type="number" autocomplete="off" id="cont2"  name="balance" class="form-control" placeholder="PC">
+            <?php //echo form_error("balance"); ?>
+        </div>
+    </div>
+
+     <div class="col-sm-4">
+      <div class="form-group">
+        <span>Quantity </b> </span>
+            <input type="number" autocomplete="off" id="total_cont" required name="balance" class="form-control" placeholder="Quantity" required>
+            <?php echo form_error("balance"); ?>
+        </div>
+    </div>
+
+    
+   
+</div>
+
+<div class="row clearfix">                            
+    <div class="col-sm-12">
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Transifor</button>
+    <!--  <a href="<?php //echo base_url("admin/all_productStore"); ?>" class="btn btn-info"><i class="icon-arrow-left"></i></a> -->
+      </div>
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<div class="row clearfix">
+<div class="col-lg-12">
+<div class="card">
+<div class="header">
+    <div class="row">
+        <div class="col-lg-6">
+      <h2>Transifor Record</b> </h2>
+      </div>
+      <div class="col-lg-6">
+          <div class="pull-right">
+
+              <a href="<?php echo base_url("admin/print_previous_transfor"); ?>" class="btn btn-info btn-sm" target="_blank"><i class="icon-printer"></i>Print</a>
+              <a href="<?php echo base_url("admin/previous_transfor"); ?>" class="btn btn-primary btn-sm"><i class="icon-calendar"></i>Previous</a>
+          </div>
+          
+      </div>
+      </div>
+</div>
+<div class="body">
+    <div class="table-responsive">
+<table class="table table-hover js-basic-example dataTable table-custom">
+            <thead class="thead-primary">
+                <tr>
+                    <th>Seller</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Seller</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                </tr>
+            </tfoot>
+            <tbody>
+              <?php foreach ($trans as $transs): ?>
+            <tr>
+           
+            <td><?php echo $transs->full_name; ?></td>
+            <td><?php echo $transs->name; ?></td>
+            <td>
+             <?php echo $transs->trans_qnty; ?>
+            <td>
+             <?php echo $transs->trans_date; ?>
+            </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+
+<?php include 'incs/footer.php'; ?>
+<script src="<?php echo base_url('assets/admin/js/select2.min.js'); ?>"></script>
+
+
+<script>
+        $(document).ready(function () { 
+        $("#cont1,#cont2").change(function() {
+    $("#total_cont").val ($("#cont1").val() * $("#cont2").val());
+            });
+        });
+    </script>
+
+
+    <script>
+$(document).ready(function(){
+$('#product').change(function(){
+var product_id = $('#product').val();
+//alert(product_id)
+if(product_id != ''){
+
+$.ajax({
+url:"<?php echo base_url(); ?>admin/fetch_ward_data",
+method:"POST",
+data:{product_id:product_id},
+success:function(data)
+{
+$('#stoo').html(data);
+$('#district').html('<option value="">All</option>');
+}
+});
+}
+else
+{
+$('#stoo').html('<option value="">Select product</option>');
+$('#district').html('<option value="">All</option>');
+}
+});
+
+
+
+// $('#region').change(function(){
+// var region_id = $('#region').val();
+// if(region_id != '')
+// {
+// $.ajax({
+// url:"<?php //echo base_url(); ?>admin/fetch_data_vipimioData",
+// method:"POST",
+// data:{region_id:region_id},
+// success:function(data)
+// {
+// $('#district').html(data);
+// //$('#malipo_name').html('<option value="">select center</option>');
+// }
+// });
+// }
+// else
+// {
+// $('#district').html('<option value="">All</option>');
+// //$('#malipo_name').html('<option value="">chagua vipimio</option>');
+// }
+// });
+
+// $('#social').change(function(){
+//  var district_id = $('#social').val();
+//  if(district_id != '')
+//  {
+//   $.ajax({
+//    url:"<?php echo base_url(); ?>user/fetch_data_malipo",
+//    method:"POST",
+//    data:{district_id:district_id},
+//    success:function(data)
+//    {
+//     $('#malipo_name').html(data);
+//     //$('#malipo').html('<option value="">chagua malipo</option>');
+//    }
+//   });
+//  }
+//  else
+//  {
+//   //$('#vipimio').html('<option value="">chagua vipimio</option>');
+//   $('#malipo_name').html('<option value="">chagua vipimio</option>');
+//  }
+// });
+
+
+});
+</script>
+
+<script>
+    $('.select2').select2();
+</script>
+
